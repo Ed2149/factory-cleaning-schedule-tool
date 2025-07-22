@@ -9,18 +9,28 @@
 </head>
 <body class="bg-gray-900 text-white min-h-screen">
 
+  <!-- Header -->
   <header class="p-6 bg-gray-800 border-b border-cyan-600 flex justify-between items-center">
     <h1 class="text-2xl font-bold text-cyan-400">🧼 Manager Control Panel</h1>
     <button onclick="logout()" class="text-sm text-cyan-300">Logout</button>
   </header>
 
-  <main class="p-6 space-y-8">
+  <main class="p-6 space-y-10">
+
+    <!-- 🎯 Task Entry Form -->
     <section>
-      <h2 class="text-xl font-semibold text-cyan-300 mb-4">➕ Add Cleaning Task</h2>
-      <form id="taskForm" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <button id="showTaskForm" class="btn-primary mb-4">➕ Add New Task</button>
+      <form id="taskForm" class="grid grid-cols-1 sm:grid-cols-2 gap-4 hidden">
         <input type="text" id="taskText" placeholder="Task Description" class="input-style" required />
         <input type="text" id="assignedTo" placeholder="Assigned To" class="input-style" required />
         <input type="date" id="deadline" class="input-style" required />
+        <select id="zone" class="input-style">
+          <option value="">Select Zone</option>
+          <option>Zone A</option>
+          <option>Zone B</option>
+          <option>Packing</option>
+          <option>Lab</option>
+        </select>
         <select id="status" class="input-style">
           <option>Pending</option>
           <option>Completed</option>
@@ -29,13 +39,35 @@
       </form>
     </section>
 
+    <!-- 🔍 Filter Controls -->
+    <section class="space-y-4">
+      <h2 class="text-xl font-semibold text-cyan-300">🔎 Filter Tasks</h2>
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <input type="text" id="searchInput" placeholder="Search by name..." class="input-style" />
+        <select id="filterZone" class="input-style">
+          <option value="">All Zones</option>
+          <option>Zone A</option>
+          <option>Zone B</option>
+          <option>Packing</option>
+          <option>Lab</option>
+        </select>
+        <select id="filterStatus" class="input-style">
+          <option value="">All Statuses</option>
+          <option>Pending</option>
+          <option>Completed</option>
+        </select>
+        <input type="date" id="filterDate" class="input-style" />
+      </div>
+    </section>
+
+    <!-- 📋 Task Display -->
     <section>
-      <h2 class="text-xl font-semibold text-cyan-300 mb-4">📋 All Tasks</h2>
+      <h2 class="text-xl font-semibold text-cyan-300 mb-4">🧾 Current Tasks</h2>
       <ul id="taskList" class="space-y-4"></ul>
     </section>
+
   </main>
 
-  <script src="manager.js"></script>
+  <script src="task-filter.js"></script>
 </body>
 </html>
-
