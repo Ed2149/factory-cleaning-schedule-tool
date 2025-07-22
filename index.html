@@ -1,28 +1,50 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8"/>
+  <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>CLEANING SCHEDULE TOOL</title>
+  <title>Cleaning Schedule Tool</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="style.css"/>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body class="bg-gray-900 text-white flex items-center justify-center min-h-screen">
 
   <div class="grid md:grid-cols-2 w-full max-w-5xl bg-white/10 backdrop-blur-md rounded-xl shadow-xl overflow-hidden border border-cyan-600">
-    <!-- Login Panel -->
-    <div class="p-10 flex flex-col justify-center space-y-6">
-      <h2 class="text-3xl font-bold text-cyan-400">🔐 Factory Access Portal</h2>
 
+    <!-- Auth Panel -->
+    <div class="p-10 flex flex-col justify-center space-y-6">
+      <h2 class="text-3xl font-bold text-cyan-400">🔐 Cleaning Schedule Tool</h2>
+
+      <!-- Login -->
       <form id="login-form" class="space-y-4">
-        <input type="email" id="email" placeholder="Email" class="input-style" required />
-        <input type="password" id="password" placeholder="Password" class="input-style" required />
+        <input type="email" id="emailLogin" placeholder="Email" class="input-style" required />
+        <input type="password" id="passwordLogin" placeholder="Password" class="input-style" required />
         <button type="submit" class="btn-primary">Login</button>
         <p id="loginError" class="text-red-400 text-sm text-center"></p>
+        <p class="text-xs text-center">
+          No account?
+          <button id="showSignup" class="text-cyan-300 underline">Create one</button>
+        </p>
       </form>
+
+      <!-- Signup -->
+      <form id="signup-form" class="space-y-4 hidden">
+        <input type="text" id="nameSignup" placeholder="Full Name" class="input-style" required />
+        <input type="email" id="emailSignup" placeholder="Email" class="input-style" required />
+        <input type="password" id="passwordSignup" placeholder="Create Password" class="input-style" required />
+        <button type="submit" class="btn-primary">Sign Up</button>
+        <p id="signupError" class="text-red-400 text-sm text-center"></p>
+        <p class="text-xs text-center">
+          Already registered?
+          <button id="showLogin" class="text-cyan-300 underline">Login</button>
+        </p>
+      </form>
+
+      <!-- Theme Toggle -->
+      <button id="darkToggle" class="text-sm text-cyan-300 hover:text-white">🌘 Toggle Theme</button>
     </div>
 
-    <!-- Gear Visuals -->
+    <!-- Gear Animation Side -->
     <div class="relative flex items-center justify-center bg-gray-800">
       <div class="gear gear-sm spin"></div>
       <div class="gear gear-md spin-reverse"></div>
@@ -30,7 +52,6 @@
     </div>
   </div>
 
-  <script src="login.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>
-
