@@ -1,1 +1,21 @@
-
+.input-style {
+  width: 100%;
+  padding: 12px;
+  background-color: #111827;
+  border: 1px solid #4fd1c5;
+  border-radius: 8px;
+  color: white;
+}
+.btn-primary {
+  width: 100%;
+  background-color: #4fd1c5;
+  padding: 12px;
+  border-radius: 8px;
+  color: white;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+}
+.btn-primary:hover {
+  background-color: #38b2ac;
+}
+.gear { border:
