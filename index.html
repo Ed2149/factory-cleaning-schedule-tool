@@ -1,1 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>CLEANING SCHEDULE TOOL</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body class="bg-gray-900 text-white flex items-center justify-center min-h-screen">
+
+  <div class="grid md:grid-cols-2 w-full max-w-5xl bg-white/10 backdrop-blur-md rounded-xl shadow-xl overflow-hidden border border-cyan-600">
+    <!-- Login Panel -->
+    <div class="p-10 flex flex-col justify-center space-y-6">
+      <h2 class="text-3xl font-bold text-cyan-400">🔐 Factory Access Portal</h2>
+
+      <form id="login-form" class="space-y-4">
+        <input type="email" id="email" placeholder="Email" class="input-style" required />
+        <input type="password" id="password" placeholder="Password" class="input-style" required />
+        <button type="submit" class="btn-primary">Login</button>
+        <p id="loginError" class="text-red-400 text-sm text-center"></p>
+      </form>
+    </div>
+
+    <!-- Gear Visuals -->
+    <div class="relative flex items-center justify-center bg-gray-800">
+      <div class="gear gear-sm spin"></div>
+      <div class="gear gear-md spin-reverse"></div>
+      <div class="gear gear-lg pulse-spin"></div>
+    </div>
+  </div>
+
+  <script src="login.js"></script>
+</body>
+</html>
 
