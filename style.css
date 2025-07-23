@@ -79,3 +79,8 @@ input.input-style[type="date"] {
   background-position: right 12px center;
   background-size: 16px;
 }
+#gearCanvas {
+  pointer-events: none;
+  z-index: -1;
+  background: linear-gradient(to bottom right, #0f172a, #1e293b);
+}
