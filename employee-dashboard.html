@@ -6,8 +6,65 @@
   <title>Employee Dashboard</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="style.css"/>
+  <script>
+    /* ☁️ Fog Background Layer */
+.fog-layer {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background: radial-gradient(circle at 40% 40%, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+  animation: fog 40s linear infinite;
+  pointer-events: none;
+  opacity: 0.6;
+  backdrop-filter: blur(2px);
+}
+
+@keyframes fog {
+  0% { transform: translateX(-50px); }
+  50% { transform: translateX(50px); }
+  100% { transform: translateX(-50px); }
+}
+/* ☁️ Dashboard Fog Effect */
+.fog-layer {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  opacity: 0.5;
+  backdrop-filter: blur(3px);
+  background: radial-gradient(circle at 40% 40%, rgba(255,255,255,0.03), rgba(255,255,255,0.01));
+  animation: fogDrift 60s linear infinite;
+  pointer-events: none;
+}
+
+@keyframes fogDrift {
+  0% { transform: translateX(-50px); }
+  50% { transform: translateX(50px); }
+  100% { transform: translateX(-50px); }
+}
+ .fog-layer {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  backdrop-filter: blur(3px);
+  background: radial-gradient(circle at 40% 40%, rgba(255,255,255,0.05), rgba(255,255,255,0.01));
+  animation: fogDrift 60s linear infinite;
+  pointer-events: none;
+  transition: opacity 1s ease;
+}
+
+@keyframes fogDrift {
+  0% { transform: translateX(-50px); }
+  50% { transform: translateX(50px); }
+  100% { transform: translateX(-50px); }
+}
+   
+  </script>
 </head>
 <body class="bg-gray-900 text-white min-h-screen">
+  <div class="fog-layer"></div>
+<div class="fog-layer" style="animation-delay: -30s; opacity: 0.3;"></div>
+<div id="fogLayer" class="fog-layer"></div>
+
   <div class="fog-layer"></div>
 <div class="fog-layer" style="animation-delay: -20s; opacity: 0.3;"></div>
 
