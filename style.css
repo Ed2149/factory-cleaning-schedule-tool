@@ -18,47 +18,19 @@ body.dark-mode {
   position: absolute;
   background-color: rgba(255,255,255,0.05);
 }
-.gear-sm {
-  width: 50px;
-  height: 50px;
-  top: 15%;
-  left: 25%;
-}
-.gear-md {
-  width: 80px;
-  height: 80px;
-  top: 40%;
-  left: 60%;
-}
-.gear-lg {
-  width: 120px;
-  height: 120px;
-  bottom: 15%;
-  right: 20%;
-}
-.spin {
-  animation: spin 6s linear infinite;
-}
-.spin-reverse {
-  animation: spinReverse 8s linear infinite;
-}
-.pulse-spin {
-  animation: pulseSpin 4s ease-in-out infinite;
-}
+.gear-sm { width: 50px; height: 50px; top: 15%; left: 25%; }
+.gear-md { width: 80px; height: 80px; top: 40%; left: 60%; }
+.gear-lg { width: 120px; height: 120px; bottom: 15%; right: 20%; }
+.spin { animation: spin 6s linear infinite; }
+.spin-reverse { animation: spinReverse 8s linear infinite; }
+.pulse-spin { animation: pulseSpin 4s ease-in-out infinite; }
 
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
-@keyframes spinReverse {
-  0% { transform: rotate(360deg); }
-  100% { transform: rotate(0deg); }
-}
+@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+@keyframes spinReverse { from { transform: rotate(360deg); } to { transform: rotate(0deg); } }
 @keyframes pulseSpin {
   0%, 100% { transform: scale(1) rotate(0deg); }
   50% { transform: scale(1.3) rotate(180deg); }
 }
-
 /* 💠 INPUT FIELD & BUTTON STYLES */
 .input-style {
   width: 100%;
