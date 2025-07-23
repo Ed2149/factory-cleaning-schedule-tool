@@ -42,9 +42,27 @@
   50% { transform: translateX(50px); }
   100% { transform: translateX(-50px); }
 }
+    .fog-layer {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  backdrop-filter: blur(3px);
+  background: radial-gradient(circle at 40% 40%, rgba(255,255,255,0.05), rgba(255,255,255,0.01));
+  animation: fogDrift 60s linear infinite;
+  pointer-events: none;
+  transition: opacity 1s ease;
+}
+
+@keyframes fogDrift {
+  0% { transform: translateX(-50px); }
+  50% { transform: translateX(50px); }
+  100% { transform: translateX(-50px); }
+}
+
 </style>
 </head>
 <body class="bg-gray-900 text-white min-h-screen">
+  <div id="fogLayer" class="fog-layer"></div>
   <div class="fog-layer"></div>
 <div class="fog-layer" style="animation-delay: -30s; opacity: 0.3;"></div>
 
