@@ -76,3 +76,34 @@ def login(
     except Exception as e:
         traceback.print_exc()
         raise HTTPException(status_code=500, detail="Login failed due to server error")
+
+from sqlalchemy import desc
+from pydantic import BaseModel
+
+# Task model (you should also define Task in models.py, see below)
+class TaskCreate(BaseModel):
+    title: str
+    description: str
+    assigned_to: str  # staff email or name
+    status: str  # e.g. "pending", "done"
+
+@app.post("/tasks")
+def create_task(task: TaskCreate, db: Session = Depends(get_db)):
+    new_task = Task(**task.dict())
+    db.add(new_task)
+    db.commit()
+    return {"message": "Task created"}
+
+@app.get("/tasks")
+def get_tasks(db: Session = Depends(get_db)):
+    tasks = db.query(Task).order_by(desc(Task.id)).all()
+    return tasks
+
+@app.patch("/tasks/{task_id}")
+def update_task_status(task_id: int, status: str = Form(...), db: Session = Depends(get_db)):
+    task = db.query(Task).filter(Task.id == task_id).first()
+    if not task:
+        raise HTTPException(status_code=404, detail="Task not found")
+    task.status = status
+    db.commit()
+    return {"message": "Task status updated"}
