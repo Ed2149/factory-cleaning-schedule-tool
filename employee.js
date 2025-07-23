@@ -28,4 +28,23 @@ function markDone(id) {
 function logout() {
   window.location.href = 'index.html';
 }
+function updateFogOpacity(pendingCount) {
+  const fog = document.getElementById('fogLayer');
+  if (!fog) return;
+  if (pendingCount <= 5) {
+    fog.style.opacity = '0.2';
+  } else if (pendingCount <= 15) {
+    fog.style.opacity = '0.5';
+  } else {
+    fog.style.opacity = '0.8';
+  }
+}
+
+// Example: update based on real-time count from DOM
+const pendingTasks = document.querySelectorAll('.task-status')
+  ? Array.from(document.querySelectorAll('.task-status'))
+    .filter(el => el.textContent.includes('Pending')).length
+  : 0;
+
+updateFogOpacity(pendingTasks);
 
