@@ -1,14 +1,61 @@
-document.getElementById('login-form').addEventListener('submit', function(e) {
+// === LOGIN LOGIC ===
+document.getElementById("loginForm").addEventListener("submit", async (e) => {
   e.preventDefault();
-  const email = document.getElementById('email').value.trim();
-  const password = document.getElementById('password').value.trim();
 
-  if (email === 'manager@gearops.com' && password === 'admin123') {
-    window.location.href = 'manager-dashboard.html';
-  } else if (email === 'employee@gearops.com' && password === 'clean123') {
-    window.location.href = 'employee-dashboard.html';
-  } else {
-    document.getElementById('loginError').textContent = 'Invalid credentials.';
+  const email = document.getElementById("loginEmail").value.trim();
+  const password = document.getElementById("loginPassword").value.trim();
+
+  try {
+    const res = await fetch("http://127.0.0.1:8000/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: new URLSearchParams({ email, password }),
+    });
+
+    if (!res.ok) {
+      const err = await res.json();
+      alert(`Login failed: ${err.detail}`);
+      return;
+    }
+
+    const data = await res.json();
+    window.location.href = data.redirect;
+  } catch (error) {
+    console.error("Login error:", error);
+    alert("Login failed due to a server issue.");
   }
 });
 
+// === SIGNUP LOGIC ===
+document.getElementById("signupForm").addEventListener("submit", async (e) => {
+  e.preventDefault();
+
+  const name = document.getElementById("signupName").value.trim();
+  const email = document.getElementById("signupEmail").value.trim();
+  const password = document.getElementById("signupPassword").value.trim();
+  const role = document.getElementById("signupRole").value;
+
+  try {
+    const res = await fetch("http://127.0.0.1:8000/signup", {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: new URLSearchParams({ name, email, password, role }),
+    });
+
+    if (!res.ok) {
+      const err = await res.json();
+      alert(`Signup failed: ${err.detail}`);
+      return;
+    }
+
+    alert("Account created successfully!");
+    document.getElementById("signupForm").reset();
+
+    // Optional: toggle back to login view
+    document.getElementById("signupSection").style.display = "none";
+    document.getElementById("loginSection").style.display = "block";
+  } catch (error) {
+    console.error("Signup error:", error);
+    alert("Signup failed due to a server issue.");
+  }
+});
