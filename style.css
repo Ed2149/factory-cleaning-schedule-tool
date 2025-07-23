@@ -84,20 +84,7 @@ input.input-style[type="date"] {
   z-index: -1;
   background: linear-gradient(to bottom right, #0f172a, #1e293b);
 }
-/* ☁️ Fog Background Layer */
-.fog-layer {
-  position: fixed;
-  inset: 0;
-  z-index: -1;
-  background: radial-gradient(circle at 40% 40%, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
-  animation: fog 40s linear infinite;
-  pointer-events: none;
-  opacity: 0.6;
-  backdrop-filter: blur(2px);
-}
-
-@keyframes fog {
-  0% { transform: translateX(-50px); }
-  50% { transform: translateX(50px); }
-  100% { transform: translateX(-50px); }
+body.dark-mode .fog-layer {
+  opacity: 0.4;
+  background: radial-gradient(circle at 60% 40%, rgba(79,209,197,0.06), rgba(0,0,0,0.02));
 }
