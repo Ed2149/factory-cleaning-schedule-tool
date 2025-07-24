@@ -1,3 +1,6 @@
+// === GearOps Backend URL ===
+const BASE_URL = "https://factory-cleaning-schedule-tool.onrender.com";
+
 // === LOGIN LOGIC ===
 document.getElementById("loginForm").addEventListener("submit", async (e) => {
   e.preventDefault();
@@ -6,7 +9,7 @@ document.getElementById("loginForm").addEventListener("submit", async (e) => {
   const password = document.getElementById("loginPassword").value.trim();
 
   try {
-    const res = await fetch("http://127.0.0.1:8000/login", {
+    const res = await fetch(`${BASE_URL}/login`, {
       method: "POST",
       headers: { "Content-Type": "application/x-www-form-urlencoded" },
       body: new URLSearchParams({ email, password }),
@@ -19,6 +22,7 @@ document.getElementById("loginForm").addEventListener("submit", async (e) => {
     }
 
     const data = await res.json();
+    localStorage.setItem("userEmail", email); // Store session
     window.location.href = data.redirect;
   } catch (error) {
     console.error("Login error:", error);
@@ -36,7 +40,7 @@ document.getElementById("signupForm").addEventListener("submit", async (e) => {
   const role = document.getElementById("signupRole").value;
 
   try {
-    const res = await fetch("http://127.0.0.1:8000/signup", {
+    const res = await fetch(`${BASE_URL}/signup`, {
       method: "POST",
       headers: { "Content-Type": "application/x-www-form-urlencoded" },
       body: new URLSearchParams({ name, email, password, role }),
@@ -50,8 +54,6 @@ document.getElementById("signupForm").addEventListener("submit", async (e) => {
 
     alert("Account created successfully!");
     document.getElementById("signupForm").reset();
-
-    // Optional: toggle back to login view
     document.getElementById("signupSection").style.display = "none";
     document.getElementById("loginSection").style.display = "block";
   } catch (error) {
