@@ -1,10 +1,19 @@
-const employeeEmail = "employee@gearops.com"; // You can make this dynamic later
+// === GearOps Backend Base URL ===
+const BASE_URL = "https://factory-cleaning-schedule-tool.onrender.com";
+
+const employeeEmail = localStorage.getItem("userEmail"); // Dynamically retrieved
 const employeeTasks = document.getElementById('employeeTasks');
+
+// Fallback for missing session
+if (!employeeEmail) {
+  alert("No user session found. Please log in.");
+  window.location.href = "index.html";
+}
 
 // === Load and Render Tasks Assigned to This Employee ===
 async function loadEmployeeTasks() {
   try {
-    const res = await fetch("http://127.0.0.1:8000/tasks");
+    const res = await fetch(`${BASE_URL}/tasks`);
     const tasks = await res.json();
 
     const filtered = tasks.filter(t => t.assigned_to === employeeEmail);
@@ -32,7 +41,6 @@ function renderEmployeeTasks(tasks) {
       Status: <span class="task-status">${t.status}</span><br>
     `;
 
-    // Only show "Mark as Done" for incomplete tasks
     if (t.status.toLowerCase() !== "done") {
       const btn = document.createElement('button');
       btn.textContent = "Mark as Done";
@@ -48,7 +56,7 @@ function renderEmployeeTasks(tasks) {
 // === Update Task Status to "done" ===
 async function markDone(taskId) {
   try {
-    const res = await fetch(`http://127.0.0.1:8000/tasks/${taskId}`, {
+    const res = await fetch(`${BASE_URL}/tasks/${taskId}`, {
       method: "PATCH",
       headers: { "Content-Type": "application/x-www-form-urlencoded" },
       body: new URLSearchParams({ status: "done" }),
