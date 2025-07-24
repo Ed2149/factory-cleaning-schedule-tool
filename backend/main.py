@@ -1,8 +1,11 @@
-from fastapi import FastAPI, Depends, HTTPException, Form
+from fastapi import FastAPI, Depends, HTTPException, Form, Request
+from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
+from sqlalchemy import desc
+from pydantic import BaseModel
 from database import SessionLocal, engine
-from models import Base, User
+from models import Base, User, Task
 from auth import hash_password, verify_password
 import traceback
 
@@ -11,16 +14,16 @@ Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
 
-# Enable CORS for frontend requests
+# Enable CORS for GitHub Pages frontend
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["https://ed2149.github.io"],  # You can restrict this to your frontend domain later
+    allow_origins=["https://ed2149.github.io"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"]
 )
 
-# Dependency injection: database session
+# Dependency injection for DB session
 def get_db():
     db = SessionLocal()
     try:
@@ -28,7 +31,7 @@ def get_db():
     finally:
         db.close()
 
-# 👤 SIGNUP ROUTE
+# === SIGNUP ===
 @app.post("/signup")
 def signup(
     name: str = Form(...),
@@ -39,7 +42,7 @@ def signup(
 ):
     try:
         if db.query(User).filter(User.email == email).first():
-            raise HTTPException(status_code=400, detail="Email already registered")
+            return JSONResponse(status_code=400, content={"detail": "Email already registered"})
 
         user = User(
             name=name,
@@ -52,9 +55,9 @@ def signup(
         return {"message": "Account created"}
     except Exception as e:
         traceback.print_exc()
-        raise HTTPException(status_code=500, detail="Something went wrong during signup")
+        return JSONResponse(status_code=500, content={"detail": "Signup failed due to server error"})
 
-# 🔐 LOGIN ROUTE
+# === LOGIN ===
 @app.post("/login")
 def login(
     email: str = Form(...),
@@ -65,27 +68,23 @@ def login(
         user = db.query(User).filter(User.email == email).first()
 
         if not user or not verify_password(password, user.password):
-            raise HTTPException(status_code=401, detail="Invalid email or password")
+            return JSONResponse(status_code=401, content={"detail": "Invalid email or password"})
 
-        # Redirect logic based on user role
-        if user.role == "manager":
-            return {"redirect": "/manager_dashboard.html"}
-        elif user.role == "staff":
-            return {"redirect": "/employee_dashboard.html"}
-        
+        redirect_url = (
+            "/manager_dashboard.html" if user.role == "manager"
+            else "/employee_dashboard.html"
+        )
+        return {"redirect": redirect_url}
     except Exception as e:
         traceback.print_exc()
-        raise HTTPException(status_code=500, detail="Login failed due to server error")
+        return JSONResponse(status_code=500, content={"detail": "Login failed due to server error"})
 
-from sqlalchemy import desc
-from pydantic import BaseModel
-
-# Task model (you should also define Task in models.py, see below)
+# === TASK OPERATIONS ===
 class TaskCreate(BaseModel):
     title: str
     description: str
-    assigned_to: str  # staff email or name
-    status: str  # e.g. "pending", "done"
+    assigned_to: str
+    status: str
 
 @app.post("/tasks")
 def create_task(task: TaskCreate, db: Session = Depends(get_db)):
@@ -103,16 +102,7 @@ def get_tasks(db: Session = Depends(get_db)):
 def update_task_status(task_id: int, status: str = Form(...), db: Session = Depends(get_db)):
     task = db.query(Task).filter(Task.id == task_id).first()
     if not task:
-        raise HTTPException(status_code=404, detail="Task not found")
+        return JSONResponse(status_code=404, content={"detail": "Task not found"})
     task.status = status
     db.commit()
     return {"message": "Task status updated"}
-from fastapi.middleware.cors import CORSMiddleware
-
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["https://ed2149.github.io"],  
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
