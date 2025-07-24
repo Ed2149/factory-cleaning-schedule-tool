@@ -111,7 +111,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["https://ed2149.github.io/factory-cleaning-schedule-tool/"],  
+    allow_origins=["https://ed2149.github.io"],  
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
