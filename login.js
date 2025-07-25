@@ -1,22 +1,20 @@
 const BASE_URL = "https://factory-cleaning-schedule-tool.onrender.com";
 
-// Toggle UI Sections
 document.getElementById("showSignup").onclick = () => {
-  document.getElementById("loginForm").classList.add("hidden");
-  document.getElementById("signupForm").classList.remove("hidden");
+  document.getElementById("login-form").classList.add("hidden");
+  document.getElementById("signup-form").classList.remove("hidden");
 };
 
 document.getElementById("showLogin").onclick = () => {
-  document.getElementById("signupForm").classList.add("hidden");
-  document.getElementById("loginForm").classList.remove("hidden");
+  document.getElementById("signup-form").classList.add("hidden");
+  document.getElementById("login-form").classList.remove("hidden");
 };
 
-// LOGIN Handler
-document.getElementById("loginForm").addEventListener("submit", async (e) => {
+// LOGIN
+document.getElementById("login-form").addEventListener("submit", async (e) => {
   e.preventDefault();
-
-  const email = document.getElementById("loginEmail").value.trim();
-  const password = document.getElementById("loginPassword").value.trim();
+  const email = document.getElementById("emailLogin").value.trim();
+  const password = document.getElementById("passwordLogin").value.trim();
   const error = document.getElementById("loginError");
 
   try {
@@ -35,23 +33,22 @@ document.getElementById("loginForm").addEventListener("submit", async (e) => {
     localStorage.setItem("userEmail", email);
     window.location.href = data.redirect;
   } catch (err) {
-    console.error("Login error:", err);
-    error.textContent = "Server error. Try again later.";
+    error.textContent = "Server error. Try again.";
+    console.error(err);
   }
 });
 
-// SIGNUP Handler
-document.getElementById("signupForm").addEventListener("submit", async (e) => {
+// SIGNUP (Fix: matched form IDs and field names)
+document.getElementById("signup-form").addEventListener("submit", async (e) => {
   e.preventDefault();
-
-  const name = document.getElementById("signupName").value.trim();
-  const email = document.getElementById("signupEmail").value.trim();
-  const password = document.getElementById("signupPassword").value.trim();
-  const role = document.getElementById("signupRole").value;
+  const name = document.getElementById("nameSignup").value.trim();
+  const email = document.getElementById("emailSignup").value.trim();
+  const password = document.getElementById("passwordSignup").value.trim();
+  const role = document.getElementById("roleSignup").value;
   const error = document.getElementById("signupError");
 
   if (!name || !email || !password || !role) {
-    error.textContent = "Please fill out all fields.";
+    error.textContent = "Please fill in all fields.";
     return;
   }
 
@@ -68,12 +65,12 @@ document.getElementById("signupForm").addEventListener("submit", async (e) => {
       return;
     }
 
-    alert("Account created successfully!");
-    document.getElementById("signupForm").reset();
-    document.getElementById("signupForm").classList.add("hidden");
-    document.getElementById("loginForm").classList.remove("hidden");
+    alert("Account created. You can log in.");
+    document.getElementById("signup-form").reset();
+    document.getElementById("signup-form").classList.add("hidden");
+    document.getElementById("login-form").classList.remove("hidden");
   } catch (err) {
-    console.error("Signup error:", err);
-    error.textContent = "Server error. Try again later.";
+    error.textContent = "Server error. Try again.";
+    console.error(err);
   }
 });
