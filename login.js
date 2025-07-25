@@ -34,7 +34,8 @@ document.getElementById("login-form").addEventListener("submit", async (e) => {
     localStorage.setItem("userEmail", email);
 
     if (data.redirect) {
-      window.location.href = data.redirect;
+      console.log("Redirecting to:", data.redirect);
+      window.location.replace(data.redirect); // ✅ redirect fix
     } else {
       console.error("No redirect found in response", data);
       error.textContent = "Login succeeded but no redirect provided.";
@@ -45,7 +46,7 @@ document.getElementById("login-form").addEventListener("submit", async (e) => {
   }
 });
 
-// SIGNUP (Fix: matched form IDs and field names)
+// SIGNUP
 document.getElementById("signup-form").addEventListener("submit", async (e) => {
   e.preventDefault();
   const name = document.getElementById("nameSignup").value.trim();
