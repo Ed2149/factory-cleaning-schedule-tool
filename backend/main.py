@@ -52,8 +52,8 @@ def login(email: str = Form(...), password: str = Form(...), db: Session = Depen
 
         # ✅ Centralized role-based redirect
         role_redirects = {
-            "manager": "/manager_dashboard.html",
-            "staff": "/staff_dashboard.html"
+             "manager": "/factory-cleaning-schedule-tool/manager_dashboard.html",
+    "staff": "/factory-cleaning-schedule-tool/staff_dashboard.html"
         }
         redirect_url = role_redirects.get(user.role, "/index.html")  # fallback to homepage if role is unrecognized
         print(f"Login attempt: {email}")
