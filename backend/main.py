@@ -13,6 +13,7 @@ Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
 
+# ✅ Enable CORS for GitHub Pages frontend
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["https://ed2149.github.io"],
@@ -49,12 +50,18 @@ def login(email: str = Form(...), password: str = Form(...), db: Session = Depen
         if not user or not verify_password(password, user.password):
             return JSONResponse(status_code=401, content={"detail": "Invalid email or password"})
 
-        # ✅ Let frontend handle redirect based on this key
-        redirect_url = "/manager_dashboard.html" if user.role == "manager" else "/staff_dashboard.html"
+        # ✅ Centralized role-based redirect
+        role_redirects = {
+            "manager": "/manager_dashboard.html",
+            "staff": "/staff_dashboard.html"
+        }
+        redirect_url = role_redirects.get(user.role, "/index.html")  # fallback to homepage if role is unrecognized
+
         return JSONResponse(status_code=200, content={"redirect": redirect_url})
     except Exception:
         traceback.print_exc()
         return JSONResponse(status_code=500, content={"detail": "Login failed due to server error"})
+
 @app.get("/")
 def home():
     return {"message": "API is live 🎉"}
