@@ -19,35 +19,36 @@ document.getElementById("login-form").addEventListener("submit", async (e) => {
   const password = document.getElementById("passwordLogin").value.trim();
   const error = document.getElementById("loginError");
 
-  try {
-    const res = await fetch(`${BASE_URL}/login`, {
-      method: "POST",
-      headers: { "Content-Type": "application/x-www-form-urlencoded" },
-      body: new URLSearchParams({ email, password }),
-      credentials: "include"
-    });
+ try {
+  const res = await fetch(`${BASE_URL}/login`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ email, password }),
+    credentials: "include"
+  });
 
+  const data = await res.json();
 
-    const data = await res.json();
-    if (!res.ok) {
-      error.textContent = data.detail || "Login failed.";
-      return;
-    }
-console.log("Login response:", data);
-    localStorage.setItem("userEmail", email);
-
-    if (data.redirect) {
-      console.log("Redirecting to:", data.redirect);
-      window.location.replace(data.redirect); // ✅ redirect fix
-    } else {
-      console.error("No redirect found in response", data);
-      error.textContent = "Login succeeded but no redirect provided.";
-    }
-  } catch (err) {
-    error.textContent = "Server error. Try again.";
-    console.error(err);
+  if (!res.ok) {
+    error.textContent = data.detail || "Login failed.";
+    return;
   }
-});
+
+  console.log("Login response:", data);
+  localStorage.setItem("userEmail", email);
+
+  if (data.redirect) {
+    console.log("Redirecting to:", data.redirect);
+    window.location.replace(data.redirect); // ✅ Successful redirect
+  } else {
+    console.error("No redirect found in response", data);
+    error.textContent = "Login succeeded but no redirect provided.";
+  }
+} catch (err) {
+  error.textContent = "Server error. Try again.";
+  console.error(err);
+}
+
 
 // SIGNUP
 document.getElementById("signup-form").addEventListener("submit", async (e) => {
