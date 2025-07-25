@@ -74,3 +74,9 @@ document.getElementById("signup-form").addEventListener("submit", async (e) => {
     console.error(err);
   }
 });
+const data = await res.json();
+if (data.redirect) {
+  window.location.href = data.redirect;
+} else {
+  console.error("No redirect found in response", data);
+}
