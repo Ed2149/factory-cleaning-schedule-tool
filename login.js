@@ -28,6 +28,7 @@ document.getElementById("login-form").addEventListener("submit", async (e) => {
   });
 
   const data = await res.json();
+   console.log("Full login response from backend:", data);
 
   if (!res.ok) {
     error.textContent = data.detail || "Login failed.";
@@ -38,7 +39,9 @@ document.getElementById("login-form").addEventListener("submit", async (e) => {
   localStorage.setItem("userEmail", email);
 
   if (data.redirect) {
-    console.log("Redirecting to:", data.redirect);
+   
+    console.log("Redirecting to full path:", window.location.origin + data.redirect);
+
     window.location.replace(data.redirect); // ✅ Successful redirect
   } else {
     console.error("No redirect found in response", data);
