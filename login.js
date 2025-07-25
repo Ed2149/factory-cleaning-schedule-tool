@@ -1,3 +1,5 @@
+window.addEventListener("DOMContentLoaded", () => {
+
 const BASE_URL = "https://factory-cleaning-schedule-tool.onrender.com";
 
 document.getElementById("showSignup").onclick = () => {
@@ -83,4 +85,5 @@ document.getElementById("signup-form").addEventListener("submit", async (e) => {
     error.textContent = "Server error. Try again.";
     console.error(err);
   }
+});
 });
