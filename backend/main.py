@@ -49,8 +49,9 @@ def login(email: str = Form(...), password: str = Form(...), db: Session = Depen
         if not user or not verify_password(password, user.password):
             return JSONResponse(status_code=401, content={"detail": "Invalid email or password"})
 
+        # ✅ Let frontend handle redirect based on this key
         redirect_url = "/manager_dashboard.html" if user.role == "manager" else "/employee_dashboard.html"
-        return {"redirect": redirect_url}
+        return JSONResponse(status_code=200, content={"redirect": redirect_url})
     except Exception:
         traceback.print_exc()
         return JSONResponse(status_code=500, content={"detail": "Login failed due to server error"})
@@ -63,10 +64,14 @@ class TaskCreate(BaseModel):
 
 @app.post("/tasks")
 def create_task(task: TaskCreate, db: Session = Depends(get_db)):
-    new_task = Task(**task.dict())
-    db.add(new_task)
-    db.commit()
-    return {"message": "Task created"}
+    try:
+        new_task = Task(**task.dict())
+        db.add(new_task)
+        db.commit()
+        return {"message": "Task created"}
+    except Exception:
+        traceback.print_exc()
+        return JSONResponse(status_code=500, content={"detail": "Task creation failed"})
 
 @app.get("/tasks")
 def get_tasks(db: Session = Depends(get_db)):
