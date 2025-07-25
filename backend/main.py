@@ -61,6 +61,8 @@ def login(email: str = Form(...), password: str = Form(...), db: Session = Depen
     except Exception:
         traceback.print_exc()
         return JSONResponse(status_code=500, content={"detail": "Login failed due to server error"})
+print(f"Login attempt: {email}")
+print(f"Redirecting to: {redirect_url}")
 
 @app.get("/")
 def home():
