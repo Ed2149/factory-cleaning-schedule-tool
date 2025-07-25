@@ -50,11 +50,14 @@ def login(email: str = Form(...), password: str = Form(...), db: Session = Depen
             return JSONResponse(status_code=401, content={"detail": "Invalid email or password"})
 
         # ✅ Let frontend handle redirect based on this key
-        redirect_url = "/manager_dashboard.html" if user.role == "manager" else "/employee_dashboard.html"
+        redirect_url = "/manager_dashboard.html" if user.role == "manager" else "/staff_dashboard.html"
         return JSONResponse(status_code=200, content={"redirect": redirect_url})
     except Exception:
         traceback.print_exc()
         return JSONResponse(status_code=500, content={"detail": "Login failed due to server error"})
+@app.get("/")
+def home():
+    return {"message": "API is live 🎉"}
 
 class TaskCreate(BaseModel):
     title: str
