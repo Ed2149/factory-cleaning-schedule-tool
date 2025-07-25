@@ -56,13 +56,13 @@ def login(email: str = Form(...), password: str = Form(...), db: Session = Depen
             "staff": "/staff_dashboard.html"
         }
         redirect_url = role_redirects.get(user.role, "/index.html")  # fallback to homepage if role is unrecognized
-
+        print(f"Login attempt: {email}")
+        print(f"Redirecting to: {redirect_url}")     
         return JSONResponse(status_code=200, content={"redirect": redirect_url})
     except Exception:
         traceback.print_exc()
         return JSONResponse(status_code=500, content={"detail": "Login failed due to server error"})
-print(f"Login attempt: {email}")
-print(f"Redirecting to: {redirect_url}")
+
 
 @app.get("/")
 def home():
