@@ -22,6 +22,7 @@ document.getElementById("login-form").addEventListener("submit", async (e) => {
       method: "POST",
       headers: { "Content-Type": "application/x-www-form-urlencoded" },
       body: new URLSearchParams({ email, password }),
+      credentials: "include"
     });
 
     const data = await res.json();
@@ -31,7 +32,13 @@ document.getElementById("login-form").addEventListener("submit", async (e) => {
     }
 
     localStorage.setItem("userEmail", email);
-    window.location.href = data.redirect;
+
+    if (data.redirect) {
+      window.location.href = data.redirect;
+    } else {
+      console.error("No redirect found in response", data);
+      error.textContent = "Login succeeded but no redirect provided.";
+    }
   } catch (err) {
     error.textContent = "Server error. Try again.";
     console.error(err);
@@ -57,6 +64,7 @@ document.getElementById("signup-form").addEventListener("submit", async (e) => {
       method: "POST",
       headers: { "Content-Type": "application/x-www-form-urlencoded" },
       body: new URLSearchParams({ name, email, password, role }),
+      credentials: "include"
     });
 
     const data = await res.json();
@@ -74,9 +82,3 @@ document.getElementById("signup-form").addEventListener("submit", async (e) => {
     console.error(err);
   }
 });
-const data = await res.json();
-if (data.redirect) {
-  window.location.href = data.redirect;
-} else {
-  console.error("No redirect found in response", data);
-}
