@@ -28,7 +28,6 @@ def get_db():
     finally:
         db.close()
 
-# === SIGNUP ===
 @app.post("/signup")
 def signup(name: str = Form(...), email: str = Form(...), password: str = Form(...), role: str = Form(...), db: Session = Depends(get_db)):
     try:
@@ -43,7 +42,6 @@ def signup(name: str = Form(...), email: str = Form(...), password: str = Form(.
         traceback.print_exc()
         return JSONResponse(status_code=500, content={"detail": "Signup failed due to server error"})
 
-# === LOGIN ===
 @app.post("/login")
 def login(email: str = Form(...), password: str = Form(...), db: Session = Depends(get_db)):
     try:
@@ -57,7 +55,6 @@ def login(email: str = Form(...), password: str = Form(...), db: Session = Depen
         traceback.print_exc()
         return JSONResponse(status_code=500, content={"detail": "Login failed due to server error"})
 
-# === TASK ROUTES ===
 class TaskCreate(BaseModel):
     title: str
     description: str
