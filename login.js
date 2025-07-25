@@ -24,14 +24,14 @@ document.getElementById("login-form").addEventListener("submit", async (e) => {
       body: new URLSearchParams({ email, password }),
       credentials: "include"
     });
-console.log("Login response:", data);
+
 
     const data = await res.json();
     if (!res.ok) {
       error.textContent = data.detail || "Login failed.";
       return;
     }
-
+console.log("Login response:", data);
     localStorage.setItem("userEmail", email);
 
     if (data.redirect) {
