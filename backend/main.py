@@ -50,19 +50,18 @@ def login(email: str = Form(...), password: str = Form(...), db: Session = Depen
         if not user or not verify_password(password, user.password):
             return JSONResponse(status_code=401, content={"detail": "Invalid email or password"})
 
-        # ✅ Centralized role-based redirect
+        # ✅ Centralized role-based redirect (now with full URLs)
         role_redirects = {
-             "manager": "/factory-cleaning-schedule-tool/manager-dashboard.html",
-    "staff": "/factory-cleaning-schedule-tool/staff-dashboard.html"
+            "manager": "https://ed2149.github.io/factory-cleaning-schedule-tool/manager-dashboard.html",
+            "staff": "https://ed2149.github.io/factory-cleaning-schedule-tool/staff-dashboard.html"
         }
-        redirect_url = role_redirects.get(user.role, "/index.html")  # fallback to homepage if role is unrecognized
+        redirect_url = role_redirects.get(user.role, "https://ed2149.github.io/factory-cleaning-schedule-tool/index.html")
         print(f"Login attempt: {email}")
-        print(f"Redirecting to: {redirect_url}")     
+        print(f"Redirecting to: {redirect_url}")
         return JSONResponse(status_code=200, content={"redirect": redirect_url})
     except Exception:
         traceback.print_exc()
         return JSONResponse(status_code=500, content={"detail": "Login failed due to server error"})
-
 
 @app.get("/")
 def home():
