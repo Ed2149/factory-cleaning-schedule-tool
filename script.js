@@ -24,36 +24,18 @@ window.onload = () => {
   }
 };
 
-loginForm.addEventListener('submit', async (e) => {
+loginForm.addEventListener('submit', (e) => {
   e.preventDefault();
+  const email = document.getElementById('emailLogin').value.trim();
+  const password = document.getElementById('passwordLogin').value.trim();
+  const error = document.getElementById('loginError');
 
-  const email = loginForm.querySelector('#loginEmail').value;
-  const password = loginForm.querySelector('#loginPassword').value;
-
-  const formData = new FormData();
-  formData.append('email', email);
-  formData.append('password', password);
-
-  try {
-    const response = await fetch('https://factory-cleaning-schedule-tool.onrender.com/login', {
-      method: 'POST',
-      body: formData,
-      credentials: 'include' // Optional: for future cookie/session use
-    });
-
-    const data = await response.json();
-
-    if (response.ok && data.redirect) {
-      // ✅ Redirect to backend-specified dashboard
-      window.location.href = data.redirect;
-    } else {
-      loginError.textContent = data.detail || 'Login failed.';
-      loginError.style.display = 'block';
-    }
-  } catch (error) {
-    console.error('Login Error:', error);
-    loginError.textContent = 'Something went wrong.';
-    loginError.style.display = 'block';
+  if (email === 'manager@gearops.com' && password === 'admin123') {
+    window.location.href = 'manager-dashboard.html';
+  } else if (email === 'employee@gearops.com' && password === 'clean123') {
+    window.location.href = 'staff-dashboard.html';
+  } else {
+    error.textContent = 'Invalid login.';
   }
 });
 
