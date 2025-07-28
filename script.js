@@ -1,96 +1,110 @@
-// === GearOps Backend Base URL ===
-const BASE_URL = "https://factory-cleaning-schedule-tool.onrender.com";
+// 🌙 Dark Mode Setup
+const toggle = document.getElementById('dark-mode-toggle');
+const body = document.body;
 
+if (localStorage.getItem('darkMode') === 'enabled') {
+  body.classList.add('dark-mode');
+}
+
+toggle.addEventListener('click', () => {
+  body.classList.toggle('dark-mode');
+  localStorage.setItem('darkMode', body.classList.contains('dark-mode') ? 'enabled' : 'disabled');
+});
+
+// 🧾 Form Switching
+const loginContainer = document.getElementById('login-container');
+const signupContainer = document.getElementById('signup-container');
+const goToSignup = document.getElementById('go-to-signup');
+const goToLogin = document.getElementById('go-to-login');
+
+goToSignup.addEventListener('click', () => {
+  loginContainer.classList.add('hidden');
+  signupContainer.classList.remove('hidden');
+});
+
+goToLogin.addEventListener('click', () => {
+  signupContainer.classList.add('hidden');
+  loginContainer.classList.remove('hidden');
+});
+
+// 🚪 Login Logic
 const loginForm = document.getElementById('login-form');
-const signupForm = document.getElementById('signup-form');
-const showSignup = document.getElementById('showSignup');
-const showLogin = document.getElementById('showLogin');
-const darkToggle = document.getElementById('darkToggle');
+const loginError = document.getElementById('loginError');
 
-// === UI Section Switch ===
-showSignup.onclick = () => {
-  loginForm.classList.add('hidden');
-  signupForm.classList.remove('hidden');
-};
-showLogin.onclick = () => {
-  signupForm.classList.add('hidden');
-  loginForm.classList.remove('hidden');
-};
-
-// === Dark Mode Toggle ===
-darkToggle.onclick = () => {
-  document.body.classList.toggle('dark-mode');
-  localStorage.setItem('gearDarkMode', document.body.classList.contains('dark-mode'));
-};
-
-window.onload = () => {
-  if (localStorage.getItem('gearDarkMode') === 'true') {
-    document.body.classList.add('dark-mode');
-  }
-};
-
-// === LOGIN Handler ===
 loginForm.addEventListener('submit', async (e) => {
   e.preventDefault();
-  const email = document.getElementById('emailLogin').value.trim();
-  const password = document.getElementById('passwordLogin').value.trim();
-  const error = document.getElementById('loginError');
+
+  const email = loginForm.querySelector('#loginEmail').value;
+  const password = loginForm.querySelector('#loginPassword').value;
+
+  const formData = new FormData();
+  formData.append('email', email);
+  formData.append('password', password);
 
   try {
-    const res = await fetch(`${BASE_URL}/login`, {
-      method: "POST",
-      headers: { "Content-Type": "application/x-www-form-urlencoded" },
-      body: new URLSearchParams({ email, password }),
+    const response = await fetch('https://factory-cleaning-schedule-tool.onrender.com/login', {
+      method: 'POST',
+      body: formData,
+      credentials: 'include'
     });
 
-    if (!res.ok) {
-      const err = await res.json();
-      error.textContent = err.detail || "Login failed.";
-      return;
-    }
+    const data = await response.json();
 
-    const data = await res.json();
-    localStorage.setItem("userEmail", email); // save session
-    window.location.href = data.redirect; // e.g. manager or employee dashboard
-  } catch (errorObj) {
-    console.error("Login failed:", errorObj);
-    error.textContent = "Server error. Try again later.";
+    if (response.ok && data.redirect) {
+      window.location.href = data.redirect;
+    } else {
+      loginError.textContent = data.detail || 'Login failed.';
+      loginError.style.display = 'block';
+    }
+  } catch (error) {
+    console.error('Login Error:', error);
+    loginError.textContent = 'Something went wrong.';
+    loginError.style.display = 'block';
   }
 });
 
-// === SIGNUP Handler ===
+// 📝 Signup Logic
+const signupForm = document.getElementById('signup-form');
+const signupError = document.getElementById('signupError');
+const signupSuccess = document.getElementById('signupSuccess');
+
 signupForm.addEventListener('submit', async (e) => {
   e.preventDefault();
-  const name = document.getElementById('nameSignup').value.trim();
-  const email = document.getElementById('emailSignup').value.trim();
-  const password = document.getElementById('passwordSignup').value.trim();
-  const role = document.getElementById('roleSignup').value;
-  const error = document.getElementById('signupError');
 
-  if (!name || !email || !password || !role) {
-    error.textContent = "Fill in all fields.";
-    return;
-  }
+  const name = signupForm.querySelector('#signupName').value;
+  const email = signupForm.querySelector('#signupEmail').value;
+  const password = signupForm.querySelector('#signupPassword').value;
+  const role = signupForm.querySelector('#signupRole').value;
+
+  const formData = new FormData();
+  formData.append('name', name);
+  formData.append('email', email);
+  formData.append('password', password);
+  formData.append('role', role);
 
   try {
-    const res = await fetch(`${BASE_URL}/signup`, {
-      method: "POST",
-      headers: { "Content-Type": "application/x-www-form-urlencoded" },
-      body: new URLSearchParams({ name, email, password, role }),
+    const response = await fetch('https://factory-cleaning-schedule-tool.onrender.com/signup', {
+      method: 'POST',
+      body: formData,
+      credentials: 'include'
     });
 
-    if (!res.ok) {
-      const err = await res.json();
-      error.textContent = err.detail || "Signup failed.";
-      return;
-    }
+    const data = await response.json();
 
-    alert("Account created! You can now log in.");
-    signupForm.reset();
-    signupForm.classList.add('hidden');
-    loginForm.classList.remove('hidden');
-  } catch (errorObj) {
-    console.error("Signup failed:", errorObj);
-    error.textContent = "Server error. Try again later.";
+    if (response.ok) {
+      signupSuccess.textContent = 'Account created! You can now login.';
+      signupSuccess.style.display = 'block';
+      signupError.style.display = 'none';
+      signupForm.reset();
+    } else {
+      signupError.textContent = data.detail || 'Signup failed.';
+      signupError.style.display = 'block';
+      signupSuccess.style.display = 'none';
+    }
+  } catch (error) {
+    console.error('Signup Error:', error);
+    signupError.textContent = 'Something went wrong.';
+    signupError.style.display = 'block';
+    signupSuccess.style.display = 'none';
   }
 });
