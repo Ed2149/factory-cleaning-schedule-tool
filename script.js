@@ -47,8 +47,10 @@ loginForm.addEventListener('submit', async (e) => {
       body: formData,
       credentials: 'include'
     });
-
-    const data = await response.json();
+console.log("Status:", response.status);  // Prints 200 if successful
+const data = await response.json();
+console.log("Response Data:", data); 
+    
 
     if (response.ok && data.redirect) {
       window.location.href = data.redirect;
